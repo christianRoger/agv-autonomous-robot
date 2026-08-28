@@ -21,7 +21,7 @@ The system uses a distributed architecture:
           │                             │
           ▼                             ▼
      ┌─────────┐                  ┌─────────────┐
-     │  ESP32  │◄──── UART ─────►│ Olimex A13  │
+     │  ESP32  │◄──── UART ─────► │ Olimex A13  │
      │         │                  │   Linux     │
      │ Real-   │                  │ High-Level  │
      │ Time    │                  │ Processing  │
