@@ -247,17 +247,46 @@ La documentazione completa dell'architettura firmware è disponibile in:
 
 ## Web Dashboard
 
-L'ESP32 integra una Web Interface accessibile tramite rete Wi-Fi.
+L'ESP32 integra una **Web Interface responsiva** accessibile tramite browser da PC, tablet o smartphone.
 
-La dashboard è progettata per fornire funzioni di:
+La dashboard è stata sviluppata come interfaccia di supervisione e controllo del sistema AGV e consente di visualizzare lo stato del veicolo e gestire le principali funzioni operative.
+
+### Funzioni principali
 
 * Monitoraggio dello stato del robot
-* Controllo manuale
+* Controllo manuale tramite joystick virtuale
 * Selezione della modalità operativa
 * Gestione delle stazioni
-* Configurazione
-* Visualizzazione dei dati
-* Monitoraggio del sistema
+* Configurazione del sistema
+* Monitoraggio della comunicazione con Olimex A13
+* Visualizzazione dei parametri e dello stato del sistema
+* Configurazione del modulo ESP32-CAM
+* Gestione delle impostazioni operative
+* Esportazione dei log di sistema in formato CSV
+
+### Dashboard principale
+
+![AGV Web Dashboard](images/dashboard.jpg)
+
+### Impostazioni
+
+![AGV Settings 01](images/impostazioni-01.jpg)
+
+![AGV Settings 02](images/impostazioni-02.jpg)
+
+![AGV Settings 03](images/impostazioni-03.jpg)
+
+![AGV Settings 04](images/impostazioni-04.jpg)
+
+Le immagini sopra mostrano l'interfaccia web sviluppata per il progetto, incluse la dashboard principale e le principali sezioni di configurazione.
+
+### Operational Logs
+
+La dashboard include inoltre un sistema di registrazione degli eventi operativi e di comunicazione del veicolo.
+
+I log possono essere esportati in formato CSV per analisi, diagnostica e verifica del comportamento del sistema.
+
+[**Esempio di log AGV**](reports/agv_logs_report.csv)
 
 ---
 
