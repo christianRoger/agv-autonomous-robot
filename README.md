@@ -370,12 +370,23 @@ agv-autonomous-robot/
 │   ├── ESP32 Firmware Architecture.md
 │   └── Communication Protocol.md
 │
-└── examples/
-    ├── AGV_ESP32_UART_Test.ino
-    └── Olimex_UART_Test.py
+├── examples/
+│   ├── AGV_ESP32_UART_Test.ino
+│   └── Olimex_UART_Test.py
+│
+├── images/
+│   ├── dashboard.jpg
+│   ├── impostazioni-01.jpg
+│   ├── impostazioni-02.jpg
+│   ├── impostazioni-03.jpg
+│   └── impostazioni-04.jpg
+│
+└── reports/
+    └── agv_logs_report.csv
 ```
 
-Il firmware completo del sistema non è pubblicato. Il repository contiene documentazione tecnica ed esempi selezionati per illustrare l'architettura e alcuni aspetti dell'implementazione.
+Il firmware completo del sistema non è pubblicato. Il repository contiene documentazione tecnica, esempi selezionati, immagini dell'interfaccia web e un esempio di log operativo, con l'obiettivo di presentare l'architettura e le principali tecnologie utilizzate nel progetto.
+
 
 ---
 
