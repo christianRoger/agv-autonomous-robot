@@ -2,146 +2,184 @@
 
 > **Autonomous Mobile Robot · ESP32 · Linux · Embedded Systems · Robotics · UART**
 
-Prototype of an **autonomous mobile robot (AGV)** developed using an **ESP32 microcontroller** and an **Olimex A13 embedded Linux platform**.
+Prototipo di **veicolo a guida autonoma (AGV)** sviluppato su piattaforma **ESP32**, **Olimex A13 con Armbian Linux** ed **ESP32-CAM**.
 
-The project combines real-time embedded control, Linux-based processing, serial communication and robotic system integration into a distributed robotic platform.
+Il progetto integra controllo embedded real-time, comunicazione seriale, gestione dei motori, acquisizione dei sensori e funzioni di navigazione autonoma all'interno di un'architettura robotica distribuita.
 
-The system is being developed as an experimental platform for studying **robotics, embedded systems, autonomous navigation, hardware/software integration and distributed control**.
+L'obiettivo è sviluppare una piattaforma sperimentale per lo studio e l'integrazione di **robotica, sistemi embedded, firmware, controllo real-time, comunicazione tra sistemi e navigazione autonoma**.
 
 ---
 
 ## Project Overview
 
-The AGV is designed around a distributed architecture combining **real-time microcontroller control** with **Linux-based higher-level processing**.
+Il sistema utilizza un'architettura distribuita nella quale ogni piattaforma svolge funzioni specifiche.
 
-The **ESP32** is responsible for real-time interaction with the robotic hardware, while the **Olimex A13** running Linux provides a higher-level computing environment for system management and future autonomous functions.
+```text
+                         TECH3D AGV V1
+                              │
+              ┌───────────────┼────────────────┐
+              │               │                │
+              ▼               ▼                ▼
+        ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+        │    ESP32    │ │ Olimex A13  │ │ ESP32-CAM   │
+        │ Real-Time   │ │    Linux    │ │ Vision / QR │
+        │ Controller  │ │ High-Level  │ │             │
+        └──────┬──────┘ └──────┬──────┘ └─────────────┘
+               │                │
+        ┌──────┴──────┐         │
+        ▼             ▼         ▼
+     Motors        Sensors   Navigation
+     + Encoders      / I/O   / Missions
+```
 
-The two platforms communicate through a **UART serial interface**.
+L'**ESP32** gestisce le funzioni real-time e l'interazione diretta con l'hardware del robot.
 
-The architecture is designed to support future integration of:
+L'**Olimex A13** esegue **Armbian Linux** e fornisce l'ambiente per le funzioni di livello superiore.
 
-* Motor control
-* Sensor acquisition
-* Autonomous navigation
-* Obstacle detection
-* Telemetry
-* Remote control
-* Path planning
-* Higher-level robotic algorithms
+L'**ESP32-CAM** è dedicata alle funzioni di acquisizione immagini e lettura dei QR Code.
 
 ---
 
 ## System Architecture
 
-The AGV uses a distributed embedded architecture where the **ESP32** and **Olimex A13 Linux platform** perform different roles within the system.
-
-```text
-                         AGV SYSTEM
-                              │
-              ┌───────────────┴───────────────┐
-              │                               │
-              ▼                               ▼
-        ┌─────────────┐                 ┌─────────────┐
-        │    ESP32    │◄──── UART ────►│  Olimex A13 │
-        │ Real-Time   │                 │    Linux    │
-        │ Controller  │                 │ High-Level  │
-        └──────┬──────┘                 │ Processing  │
-               │                        └──────┬──────┘
-               │                               │
-        ┌──────┴──────┐                 ┌──────┴──────┐
-        │             │                 │             │
-        ▼             ▼                 ▼             ▼
-     Motors        Sensors          Navigation    System
-     Control       / I/O            Algorithms    Management
-```
-
-This separation allows time-sensitive hardware operations to remain on the ESP32 while higher-level processing can be performed on the Linux platform.
+L'architettura separa il controllo real-time dalle elaborazioni di livello superiore.
 
 ### ESP32 – Real-Time Controller
 
-The ESP32 acts as the low-level controller of the robotic platform.
+L'ESP32 rappresenta il controller principale del veicolo.
 
-Its responsibilities include:
+Le sue responsabilità comprendono:
 
-* Real-time hardware control
-* GPIO management
-* Motor control interface
-* Sensor acquisition
-* UART communication
-* Command processing
-* Time-sensitive control tasks
-* Serial diagnostics and debugging
+* Controllo dei motori
+* PWM e gestione degli attuatori
+* Acquisizione degli encoder
+* Controllo PID della trazione
+* Gestione dei sensori
+* Comunicazione UART
+* Gestione dello stato del robot
+* Funzioni di sicurezza
+* Interfaccia OLED
+* Web Dashboard
+* Elaborazione dei dati provenienti dalla ESP32-CAM
+
+Il firmware utilizza **FreeRTOS** per distribuire le principali attività in task indipendenti.
 
 ### Olimex A13 – Linux Platform
 
-The Olimex A13 operates as the higher-level computing platform.
+L'Olimex A13 esegue **Armbian Linux** e rappresenta il livello di elaborazione superiore.
 
-The board runs **Armbian Linux** and provides an environment for system-level applications and future autonomous functions.
+Le sue funzioni comprendono:
 
-Its role includes:
+* Comunicazione seriale con l'ESP32
+* Gestione delle missioni
+* Elaborazione dei dati
+* Gestione delle informazioni sulle stazioni
+* Pianificazione dei percorsi
+* Supervisione del sistema
+* Sviluppo di future funzioni di navigazione autonoma
 
-* Linux-based system management
-* Serial communication with the ESP32
-* Higher-level application processing
-* Data handling
-* Telemetry processing
-* Future autonomous navigation algorithms
-* Future integration of advanced sensors and computer vision
+### ESP32-CAM
+
+L'ESP32-CAM viene utilizzata come modulo dedicato alla visione e alla lettura dei **QR Code**.
+
+I dati rilevati possono essere trasferiti all'ESP32 tramite UART e utilizzati dal sistema durante le missioni automatiche.
 
 ---
 
-## Hardware & Connections
+## Hardware
 
-The prototype is built around an **ESP32 development board** and an **Olimex A13 embedded Linux platform**.
-
-### Main Hardware
+Il prototipo è basato sui seguenti componenti principali:
 
 * ESP32 development board
-* Olimex A13 embedded Linux platform
-* Robotic chassis
-* DC motors
-* Motor drive system
-* Power supply system
-* UART serial communication interface
-* Sensors and peripheral interfaces
+* Olimex A13
+* Armbian Linux
+* ESP32-CAM
+* Motori DC
+* Encoder di quadratura
+* Motor driver
+* Display OLED SSD1306
+* Sensore ultrasonico HC-SR04
+* Buzzer
+* Segnalazione luminosa
+* Interfacce UART
+* Alimentazione e cablaggi del prototipo
 
-### ESP32
+La configurazione dettagliata dell'hardware e del pinout è disponibile in:
 
-The ESP32 provides the real-time control layer of the system.
-
-Main interfaces include:
-
-* GPIO
-* UART
-* Motor control interfaces
-* Sensor interfaces
-* Serial debugging
-
-### Olimex A13
-
-The Olimex A13 provides the Linux-based processing environment.
-
-The board runs **Armbian Linux** and communicates with the ESP32 through UART.
+**[Hardware & Connections](docs/Hardware%20%26%20Connections.md)**
 
 ---
 
-## ESP32 ↔ Olimex UART Communication
+## Motor Control
 
-Communication between the ESP32 and Olimex A13 is implemented through a **bidirectional UART serial interface**.
+La trazione utilizza due motori DC indipendenti con feedback tramite encoder di quadratura.
 
-### Serial Configuration
+```text
+                 ESP32
+                   │
+          ┌────────┴────────┐
+          ▼                 ▼
+      Motor SX          Motor DX
+          │                 │
+          ▼                 ▼
+      Encoder SX        Encoder DX
+          │                 │
+          └────────┬────────┘
+                   ▼
+             Feedback Speed
+                   │
+                   ▼
+              PID Control
+```
 
-The current prototype uses:
+Gli encoder vengono acquisiti tramite il periferico hardware **PCNT** dell'ESP32.
+
+Il feedback viene utilizzato dal controllo PID per regolare la velocità dei motori.
+
+---
+
+## Autonomous Navigation
+
+Il sistema è progettato per supportare modalità di navigazione automatica basate su missioni e stazioni.
+
+Il flusso concettuale è:
+
+```text
+Mission / Destination
+        │
+        ▼
+   Olimex A13
+ Mission Processing
+        │
+       UART
+        │
+        ▼
+      ESP32
+ Vehicle Control
+        │
+   ┌────┴────┐
+   ▼         ▼
+Motors    Sensors
+   │         │
+   └────┬────┘
+        ▼
+   Robot State
+```
+
+I **QR Code** possono essere utilizzati come riferimenti per identificare stazioni o punti della missione.
+
+---
+
+## UART Communication
+
+La comunicazione tra ESP32 e Olimex A13 utilizza una connessione UART bidirezionale.
+
+Configurazione del prototipo:
 
 * **Baud rate:** 115200
-* **Interface:** UART
-* **Data format:** 8N1
-* **Communication:** Bidirectional
-* **Physical connection:** TX / RX / GND
-
-The communication link has been tested between the ESP32 hardware serial interface and the Linux serial interface on the Olimex platform.
-
-### Connection
+* **Formato:** 8N1
+* **Comunicazione:** bidirezionale
+* **Connessione:** TX / RX / GND
 
 ```text
 ESP32                         Olimex A13
@@ -154,206 +192,188 @@ RX  ◄──────────────────────── 
 GND ───────────────────────── GND
 ```
 
-### Communication Concept
+La comunicazione viene utilizzata per scambiare comandi, informazioni di stato e dati di sistema.
 
-```text
-                UART @ 115200
-        ┌─────────────────────────┐
-        │                         │
-        ▼                         ▼
-   ┌─────────┐              ┌─────────────┐
-   │  ESP32  │              │ Olimex A13  │
-   │         │              │   Linux     │
-   │ TX ────────────────► RX│             │
-   │ RX ◄──────────────── TX│             │
-   │ GND ───────────────── GND            │
-   └─────────┘              └─────────────┘
-```
+La documentazione del protocollo è disponibile in:
 
-The serial communication layer provides the foundation for exchanging commands, status information and telemetry between the real-time controller and the Linux platform.
+**[Communication Protocol](docs/Communication%20Protocol.md)**
 
 ---
 
-## Software & Firmware
+## Safety & Fail-Safe
 
-The software architecture is divided between the **ESP32 embedded firmware** and the **Linux environment running on the Olimex A13**.
+Il sistema integra diversi meccanismi dedicati alla sicurezza del veicolo.
 
-### ESP32 Firmware
+### Obstacle Detection
 
-The ESP32 firmware is developed using **C/C++** and is responsible for low-level hardware interaction.
+Il sensore ultrasonico viene utilizzato per rilevare ostacoli davanti al robot.
 
-Main software concepts include:
+Il rilevamento di una distanza inferiore alla soglia configurata può provocare l'arresto dei motori.
 
-* Embedded C/C++
-* Hardware control
-* GPIO management
+### Communication Heartbeat
+
+La comunicazione con l'Olimex A13 utilizza un meccanismo di **heartbeat** per verificare la disponibilità del collegamento.
+
+In caso di perdita della comunicazione oltre il timeout configurato, il sistema può attivare una condizione di fail-safe.
+
+### Watchdog
+
+Il firmware ESP32 utilizza il **Task Watchdog Timer (TWDT)** per monitorare le attività principali.
+
+---
+
+## Firmware Architecture
+
+Il firmware ESP32 è organizzato in moduli indipendenti e utilizza **FreeRTOS** per la gestione delle attività concorrenti.
+
+La struttura comprende moduli dedicati a:
+
+* State management
+* Motor control
+* Encoder management
+* OLED display
+* Signaling
+* QR processing
 * UART communication
-* Command processing
-* Real-time control
-* Sensor interface management
-* Motor control interface
-* Serial logging
-* Firmware debugging
+* Navigation
+* NVS storage
+* Web server
 
-### Linux Software
+La documentazione completa dell'architettura firmware è disponibile in:
 
-The Olimex A13 provides a Linux environment for higher-level applications.
-
-The Linux layer is intended to handle:
-
-* System-level applications
-* Communication with the ESP32
-* Data processing
-* Telemetry
-* High-level control logic
-* Autonomous navigation
-* Future robotics software integration
+**[ESP32 Firmware Architecture](docs/ESP32%20Firmware%20Architecture.md)**
 
 ---
 
-## Communication Protocol
+## Web Dashboard
 
-The communication protocol is designed around a simple command-and-response model between the Linux platform and the ESP32.
+L'ESP32 integra una Web Interface accessibile tramite rete Wi-Fi.
 
-The initial communication tests use basic messages to verify the UART connection and the correct operation of both platforms.
+La dashboard è progettata per fornire funzioni di:
 
-Example:
-
-```text
-Olimex A13  ──────►  ESP32
-                    PING
-
-Olimex A13  ◄──────  ESP32
-                    PONG / STATUS
-```
-
-The protocol can be extended to support additional commands and telemetry information as the robotic platform evolves.
-
-Potential future message types include:
-
-* Motor commands
-* Sensor data
-* Robot status
-* Battery information
-* Navigation commands
-* Telemetry
-* Error/status messages
-
----
-
-## Linux Environment
-
-The Olimex A13 runs **Armbian Linux** as the operating system for the high-level computing layer.
-
-The Linux environment provides access to standard serial interfaces and system tools required for development and debugging.
-
-The platform is intended to provide the computational environment for future AGV functions such as:
-
-* Autonomous navigation
-* Path planning
-* Sensor processing
-* Telemetry
-* Computer vision
-* Remote control
-* High-level decision making
+* Monitoraggio dello stato del robot
+* Controllo manuale
+* Selezione della modalità operativa
+* Gestione delle stazioni
+* Configurazione
+* Visualizzazione dei dati
+* Monitoraggio del sistema
 
 ---
 
 ## Development & Testing
 
-Development is performed incrementally by validating individual hardware and software layers before integrating them into the complete robotic platform.
+Lo sviluppo è stato effettuato progressivamente attraverso la validazione dei singoli sottosistemi.
 
-Current development activities include:
+Le attività comprendono:
 
-* ESP32 firmware development
-* Olimex A13 Linux configuration
-* UART communication testing
-* Serial communication debugging
-* Hardware interface validation
-* ESP32 ↔ Linux integration
-* Robotic platform development
+* Sviluppo firmware ESP32
+* Configurazione Armbian Linux
+* Test UART
+* Debug della comunicazione seriale
+* Test delle interfacce hardware
+* Integrazione ESP32 ↔ Olimex A13
+* Sviluppo del controllo motori
+* Test degli encoder
+* Sviluppo delle funzioni di navigazione
+* Integrazione del modulo ESP32-CAM
 
-The UART communication between the ESP32 and Olimex A13 has been successfully tested as part of the integration process.
-
----
-
-## Project Status
-
-**Status: Experimental Prototype**
-
-The project is currently under active development.
-
-The current platform establishes the foundation for communication between the **ESP32 real-time controller** and the **Olimex A13 Linux system**.
-
-Future development will focus on integrating additional robotic functions, including:
-
-* Motor control
-* Sensor integration
-* Autonomous navigation
-* Obstacle detection
-* Telemetry
-* Path planning
-* Higher-level robotic algorithms
+La comunicazione UART tra ESP32 e Olimex A13 è stata verificata attraverso test dedicati.
 
 ---
 
-## Future Development
+## Public Technical Examples
 
-Planned development areas include:
+Il repository contiene alcuni esempi tecnici semplificati per documentare i principali concetti utilizzati nel progetto.
 
-### Motion Control
+### ESP32 UART Example
 
-Integration of the motor control system with the ESP32 firmware.
+**[AGV_ESP32_UART_Test.ino](examples/AGV_ESP32_UART_Test.ino)**
 
-### Sensor Integration
+Dimostra:
 
-Integration of sensors for environmental perception and robot state monitoring.
+* HardwareSerial
+* UART2
+* Comunicazione bidirezionale
+* Gestione dei comandi
+* Heartbeat
+* Comunicazione ESP32 ↔ Linux
 
-### Autonomous Navigation
+### Olimex A13 UART Example
 
-Development of navigation and path-planning algorithms running on the Linux platform.
+**[Olimex_UART_Test.py](examples/Olimex_UART_Test.py)**
 
-### Obstacle Detection
+Dimostra:
 
-Integration of distance and environmental sensors for obstacle detection and avoidance.
+* Comunicazione seriale Linux
+* Python
+* UART
+* Invio di comandi
+* Ricezione di risposte
+* Comunicazione Olimex A13 ↔ ESP32
 
-### Telemetry
-
-Implementation of a structured telemetry system between the ESP32 and Linux platform.
-
-### Computer Vision
-
-Future experimentation with computer vision and image-processing techniques on the Linux platform.
+> Gli esempi sono versioni semplificate pubblicate esclusivamente per documentare alcuni concetti tecnici. Il firmware completo e la logica applicativa del progetto non sono inclusi nel repository pubblico.
 
 ---
 
-## Technologies
+## Documentation
 
-**ESP32 · C/C++ · Embedded Systems · Firmware · Armbian Linux · Olimex A13 · UART · Robotics · AGV · Real-Time Control · Distributed Systems**
+La documentazione tecnica è organizzata nella cartella `docs/`.
+
+* **[System Architecture](docs/System%20Architecture.md)** — architettura generale del sistema
+* **[Hardware & Connections](docs/Hardware%20%26%20Connections.md)** — hardware e collegamenti
+* **[ESP32 Firmware Architecture](docs/ESP32%20Firmware%20Architecture.md)** — struttura del firmware
+* **[Communication Protocol](docs/Communication%20Protocol.md)** — comunicazione tra i moduli
 
 ---
 
 ## Repository Structure
 
-The repository is organized to separate documentation, firmware examples and supporting resources.
-
 ```text
 agv-autonomous-robot/
 │
 ├── README.md
+├── LICENSE
 │
 ├── docs/
+│   ├── System Architecture.md
 │   ├── Hardware & Connections.md
-│   └── Software Architecture.md
+│   ├── ESP32 Firmware Architecture.md
+│   └── Communication Protocol.md
 │
-├── examples/
-│   └── ...
-│
-└── images/
-    └── ...
+└── examples/
+    ├── AGV_ESP32_UART_Test.ino
+    └── Olimex_UART_Test.py
 ```
 
-Additional documentation and technical examples will be added as the project evolves.
+Il firmware completo del sistema non è pubblicato. Il repository contiene documentazione tecnica ed esempi selezionati per illustrare l'architettura e alcuni aspetti dell'implementazione.
+
+---
+
+## Project Status
+
+**Status: Functional Prototype / Active Development**
+
+Il progetto è attualmente sviluppato come piattaforma sperimentale e prototipo funzionale.
+
+L'architettura hardware/software e la comunicazione tra i principali moduli sono state implementate e testate progressivamente.
+
+Lo sviluppo futuro è orientato all'estensione delle funzionalità di:
+
+* Navigazione autonoma
+* Controllo della trazione
+* Integrazione sensori
+* Computer vision
+* Localizzazione
+* Path planning
+* Telemetria
+* Gestione avanzata delle missioni
+
+---
+
+## Technologies
+
+**ESP32 · C/C++ · FreeRTOS · Embedded Systems · Firmware · Armbian Linux · Olimex A13 · Python · UART · Robotics · AGV · PID Control · Encoders · PCNT · QR Code · ESP32-CAM · Web Interface**
 
 ---
 
