@@ -25,11 +25,11 @@ Il sistema utilizza un'architettura distribuita nella quale ogni piattaforma svo
         │ Real-Time   │ │    Linux    │ │ Vision / QR │
         │ Controller  │ │ High-Level  │ │             │
         └──────┬──────┘ └──────┬──────┘ └─────────────┘
-               │                │
-        ┌──────┴──────┐         │
-        ▼             ▼         ▼
+               │               │
+        ┌──────┴──────┐        │
+        ▼             ▼        ▼
      Motors        Sensors   Navigation
-     + Encoders      / I/O   / Missions
+   + Encoders      / I/O     / Missions
 ```
 
 L'**ESP32** gestisce le funzioni real-time e l'interazione diretta con l'hardware del robot.
