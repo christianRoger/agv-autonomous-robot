@@ -1,1 +1,14 @@
+Data_Ora;Messaggio
+"28/08/2026, 13:58:22";"[SYSTEM] Inizializzazione Dashboard AGV V1 Enterprise completata."
+"28/08/2026, 13:58:22";"[SYSTEM] In attesa di autenticazione utente..."
+"28/08/2026, 13:58:22";"[13:44:16] 🔴 [A13 UART] ATTENZIONE: Comunicazione Olimex A13 assente o interrotta!"
+"28/08/2026, 13:58:22";"[13:44:19] 🟢 [A13 UART] Comunicazione con Olimex A13 OK!"
+"28/08/2026, 13:58:22";"[13:44:28] 🔴 [A13 UART] ATTENZIONE: Comunicazione Olimex A13 assente o interrotta!"
+"28/08/2026, 13:58:22";"[13:44:29] 🚀 Missione inviata verso: Area_Manutenzione | 🔴 Comunicazione A13: ASSENTE"
+"28/08/2026, 13:58:22";"[13:44:31] 🟢 [A13 UART] Comunicazione con Olimex A13 OK!"
+"28/08/2026, 13:58:22";"[13:58:13] 🕹️ Comando guida manuale: FWD | 🟢 A13 OK"
+"28/08/2026, 13:58:22";"[13:58:14] 🕹️ Comando guida manuale: FWD | 🟢 A13 OK"
+"28/08/2026, 13:58:22";"[13:58:15] 🕹️ Comando guida manuale: RIGHT | 🟢 A13 OK"
+"28/08/2026, 13:58:22";"[13:58:16] 🕹️ Comando guida manuale: LEFT | 🟢 A13 OK"
+"28/08/2026, 13:58:22";"[13:58:17] 🕹️ Comando guida manuale: BACK | 🟢 A13 OK"
 
